@@ -16,7 +16,7 @@ void setup()
   pinMode(echo2, INPUT);
 }
 
-/*###Function to calculate distance###*/
+// Function to calculate distance
 void calculate_distance(int trigger, int echo)
 {
   digitalWrite(trigger, LOW);
@@ -27,12 +27,13 @@ void calculate_distance(int trigger, int echo)
 
   time_taken = pulseIn(echo, HIGH);
   dist = time_taken * 0.034 / 2;
-  if (dist > 50)
-    dist = 50;
+  if (dist > 100)
+    dist = 100;
 }
 
+//infinite loop
 void loop()
-{ //infinite loopy
+{ 
   calculate_distance(trigger1, echo1);
   distL = dist; //get distance of left sensor
 
@@ -40,14 +41,13 @@ void loop()
   distR = dist; //get distance of right sensor
 
   //Uncomment for debudding
-  /*Serial.print("L=");
-    Serial.println(distL);
-    Serial.print("R=");
-    Serial.println(distR);
-  */
+  Serial.print("L=");
+  Serial.println(distL);
+  Serial.print("R=");
+  Serial.println(distR);
 
   //Pause Modes -Hold
-  if ((distL > 40 && distR > 40) && (distL < 50 && distR < 50)) //Detect both hands
+  if ((distL > 0 && distR > 0) && (distL < 15 && distR < 15)) //Detect both hands
   {
     Serial.println("Play/Pause");
     delay(500);
@@ -61,24 +61,24 @@ void loop()
 
   //Control Modes
   //Lock Left - Control Mode
-  if (distL >= 13 && distL <= 17)
+  if (distL >= 15 && distL <= 50)
   {
     delay(100); //Hand Hold Time
     calculate_distance(trigger1, echo1);
     distL = dist;
-    if (distL >= 13 && distL <= 17)
+    if (distL >= 15 && distL <= 50)
     {
       Serial.println("Left Locked");
-      while (distL <= 40)
+      while (distL <= 50)
       {
         calculate_distance(trigger1, echo1);
         distL = dist;
-        if (distL < 10) //Hand pushed in
+        if (distL < 25) //Hand pushed in
         {
           Serial.println("Vup");
           delay(300);
         }
-        if (distL > 20) //Hand pulled out
+        if (distL > 25) //Hand pulled out
         {
           Serial.println("Vdown");
           delay(300);
@@ -88,24 +88,24 @@ void loop()
   }
 
   //Lock Right - Control Mode
-  if (distR >= 13 && distR <= 17)
+  if (distR >= 15 && distR <= 50)
   {
     delay(100); //Hand Hold Time
     calculate_distance(trigger2, echo2);
     distR = dist;
-    if (distR >= 13 && distR <= 17)
+    if (distR >= 15 && distR <= 50)
     {
       Serial.println("Right Locked");
-      while (distR <= 40)
+      while (distR <= 50)
       {
         calculate_distance(trigger2, echo2);
         distR = dist;
-        if (distR < 10) //Right hand pushed in
+        if (distR < 25) //Right hand pushed in
         {
           Serial.println("Rewind");
           delay(300);
         }
-        if (distR > 20) //Right hand pulled out
+        if (distR > 25) //Right hand pulled out
         {
           Serial.println("Forward");
           delay(300);

@@ -8,7 +8,6 @@ time.sleep(2)  # wait for 2 seconds for the communication to get established
 
 while 1:
     # read the serial data and print it as line
-    print('ana running')
     incoming = str(ArduinoSerial.readline())
     print incoming
 
